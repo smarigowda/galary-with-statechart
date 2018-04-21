@@ -1,5 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
+import './App.scss';
+
+const galleryMachine = {
+  start: {
+    SEARCH: 'loading'
+  },
+  loading: {
+    SEARCH_SUCCESS: 'gallery',
+    SEARCH_FAILURE: 'error',
+    CANCEL_SEARCH: 'gallery'
+  },
+  error: {
+    SEARCH: 'loading'
+  },
+  gallery: {
+    SEARCH: 'loading',
+    SELECT_PHOTO: 'photo'
+  },
+  photo: {
+    EXIT_PHOTO: 'gallery'
+  }
+};
 
 class App extends Component {
   constructor() {
@@ -12,6 +34,11 @@ class App extends Component {
     };
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    e.persist();
+    console.log('handleSubmit called...');
+  }
   renderForm(state) {
     const searchText = {
       loading: 'Searching...',
@@ -25,9 +52,24 @@ class App extends Component {
           className="ui-input"
           value={this.state.query}
           onChange={e => this.handleChangeQuery(e.target.value)}
-          placeholder="Search Flickr for photos..."
+          placeholder="search for photos..."
           disabled={state === 'loading'}  
         />
+        <div className="ui-buttons">
+          <button
+            className="ui-button"
+            disabled={state === 'loading'}>
+              {searchText}
+          </button>
+          {state === 'loading' &&
+            <button
+              className="ui-button"
+              type="button"
+              onClick={() => this.transition({ type: 'CANCEL_SEARCH' })}>
+              Cancel
+            </button>
+          }
+        </div>
       </form>
     )
   }
