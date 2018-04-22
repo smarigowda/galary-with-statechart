@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import './App.scss';
 import fetchJsonp from 'fetch-jsonp';
+import Photo from './Components/Photo/Photo';
 
 const galleryMachine = {
   start: {
@@ -47,7 +48,8 @@ class App extends Component {
     this.setState({ query: value })
   }
 
-  transition(action) {
+  // should be an arrow function, else this content will not be retained
+  transition = (action) => {
     const currentGalleryState = this.state.currentState;
     const nextGalleryState = galleryMachine[currentGalleryState][action.type];
     if(nextGalleryState) {
@@ -163,18 +165,7 @@ class App extends Component {
 
   renderPhoto(state) {
     if (state !== 'photo') return;
-    
-    return (
-      <section
-        className="ui-photo-detail">
-        <img
-          alt="detail"
-          src={this.state.photo.media.m}
-          className="ui-photo"
-          onClick={() => this.transition({ type: 'EXIT_PHOTO' })}
-        />
-      </section>
-    )
+    return <Photo url={this.state.photo.media.m} transition={this.transition}/>
   }
 
   render() {
