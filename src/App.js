@@ -99,7 +99,7 @@ class App extends Component {
         .catch(error => {
           this.transition({ type: 'SEARCH_FAILURE' });
         });
-    }, 3000);
+    }, 1000);
   }
 
   renderForm(state) {
@@ -166,9 +166,13 @@ class App extends Component {
     
     return (
       <section
-        className="ui-photo-detail"
-        onClick={() => this.transition({ type: 'EXIT_PHOTO' })}>
-        <img alt="detail" src={this.state.photo.media.m} className="ui-photo"/>
+        className="ui-photo-detail">
+        <img
+          alt="detail"
+          src={this.state.photo.media.m}
+          className="ui-photo"
+          onClick={() => this.transition({ type: 'EXIT_PHOTO' })}
+        />
       </section>
     )
   }
