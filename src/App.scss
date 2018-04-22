@@ -2,20 +2,64 @@
   box-shadow: 0 .2rem 1rem $color;
 }
 
+div#root {
+  width: 700px;
+  margin: auto;
+}
+
 .ui-app {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 100%;
-  // max-width: 90vw;
+  // width: 40rem;
+  max-width: 100vw;
   height: calc(100vh - 2rem);
+  
+  &[data-state="start"] {
+    justify-content: center;
+  }
+  
+  &[data-state="loading"] {
+    .ui-item {
+      opacity: .5;
+    }
+  }
+  
+  &[data-state="photo"] {
+    * {
+      opacity: 0.3;
+    }
+    
+    .ui-photo-detail, .ui-photo-detail * {
+      opacity: 1;
+    }
+    
+    .ui-items {
+      pointer-events: none;
+    }
+  }
+  
+  &:after {
+    content: 'current state: ' attr(data-state);
+    position: absolute;
+    bottom: .5rem;
+    color: white;
+    background-color: rgba(black, 0.4);
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0 0 .1rem black;
+    pointer-events: none;
+  }
 }
 
 .ui-input {
   @include shadow();
   display: block;
   appearance: none;
-  width: 30%;
+  width: 70%;
   border: none;
   border-radius: 0.5rem;
   font-size: 1.5rem;
@@ -52,6 +96,7 @@
   border-radius: 3rem;
   margin: 0 1rem;
   font-size: 1.5rem;
+  margin-bottom: 15px;
   
   
   &[disabled] {
@@ -65,4 +110,62 @@
   &:focus {
     outline: none;
   }
+}
+
+.ui-items {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  flex-shrink: 1;
+  overflow-y: scroll;
+  margin: 0 -.25rem;
+  
+  &:hover > .ui-item {
+    opacity: 0.45;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.ui-item {
+  display: block;
+  height: 10rem;
+  width: auto;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin: .25rem;
+  animation: item .5s calc(var(--i, 0) * .05s) cubic-bezier(.5, 0, .2, 1) both;
+  background-color: #EEE;
+  
+  @keyframes item {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+}
+
+.ui-photo-detail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ui-photo {
+  height: auto;
+  width: auto;
+  min-height: 50vh;
+  min-width: 50vw;
+  max-height: 100%;
+  max-width: 100%;
 }

@@ -31,7 +31,8 @@ class App extends Component {
     this.state = {
       currentState: 'start', // finite state
       query: '',
-      items: []
+      items: [],
+      photo: {},
     };
   }
 
@@ -65,7 +66,15 @@ class App extends Component {
         break;
       case 'gallery':
         if(action.items) {
+          console.log(action.items);
           return { items: action.items };
+        }
+        break;
+      case 'error':
+        break;
+      case 'photo':
+        if(action.item) {
+          return { photo: action.item }
         }
         break;
       default:
@@ -90,7 +99,7 @@ class App extends Component {
         .catch(error => {
           this.transition({ type: 'SEARCH_FAILURE' });
         });
-    }, 5000);
+    }, 3000);
   }
 
   renderForm(state) {
@@ -119,7 +128,8 @@ class App extends Component {
             <button
               className="ui-button"
               type="button"
-              onClick={() => this.transition({ type: 'CANCEL_SEARCH' })}>
+              onClick={() => this.transition({ type: 'CANCEL_SEARCH' })}
+            >
               Cancel
             </button>
           }
@@ -128,11 +138,48 @@ class App extends Component {
     )
   }
 
+  renderGallery(state) {
+    console.log(`render gallery called with state = ${state}`);
+    return (
+      <section className="ui-items" data-state={state}>
+        {state === 'error'
+          ? <span className="ui-error">Uh oh, search failed.</span>
+          : this.state.items.map((item, i) =>
+            <img
+              alt='gallery'
+              src={item.media.m}
+              className="ui-item"
+              style={{'--i': i}}
+              key={item.link}
+              onClick={() => this.transition({
+                type: 'SELECT_PHOTO', item
+              })}
+            />
+          )
+        }
+      </section>
+    );
+  }
+
+  renderPhoto(state) {
+    if (state !== 'photo') return;
+    
+    return (
+      <section
+        className="ui-photo-detail"
+        onClick={() => this.transition({ type: 'EXIT_PHOTO' })}>
+        <img alt="detail" src={this.state.photo.media.m} className="ui-photo"/>
+      </section>
+    )
+  }
+
   render() {
     const galleryState = this.state.currentState;
     return (
       <div className="ui-app" data-state={galleryState}>
         {this.renderForm(galleryState)}
+        {this.renderGallery(galleryState)}
+        {this.renderPhoto(galleryState)}
       </div>
     )
   }
