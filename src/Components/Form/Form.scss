@@ -1,0 +1,60 @@
+@mixin shadow($color: rgba(black, 0.1)) {
+  box-shadow: 0 .2rem 1rem $color;
+}
+
+.ui-input {
+  @include shadow();
+  display: block;
+  appearance: none;
+  width: 70%;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 100;
+  height: 3rem;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+
+  &::-webkit-input-placeholder {
+    color: #CDCDCD;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+.ui-buttons {
+  text-align: center;
+}
+
+.ui-button {
+  @include shadow();
+  display: inline-block;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  background-color: #EB7452;
+  color: white;
+  height: 3rem;
+  padding: 0 3rem;
+  border-radius: 3rem;
+  margin: 0 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  
+  
+  &[disabled] {
+    opacity: 0.5;
+  }
+  
+  &[type="button"] {
+    background-color: #555;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
