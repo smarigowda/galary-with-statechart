@@ -3,6 +3,7 @@ import './App.css';
 import './App.scss';
 import fetchJsonp from 'fetch-jsonp';
 import Photo from './Components/Photo/Photo';
+import Form from './Components/Form/Form';
 
 const galleryMachine = {
   start: {
@@ -37,14 +38,14 @@ class App extends Component {
     };
   }
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
     e.persist();
     console.log('handleSubmit called...');
     this.transition({ type: 'SEARCH', query: this.state.query });
   }
 
-  handleChangeQuery(value) {
+  handleChangeQuery = value => {
     this.setState({ query: value })
   }
 
@@ -105,39 +106,13 @@ class App extends Component {
   }
 
   renderForm(state) {
-    const searchText = {
-      loading: 'Searching...',
-      error: 'Try search again',
-      start: 'Search'
-    }[state] || 'Search';
-    return (
-      <form onSubmit={e => this.handleSubmit(e)}>
-        <input
-          type="search"
-          className="ui-input"
-          value={this.state.query}
-          onChange={e => this.handleChangeQuery(e.target.value)}
-          placeholder="search for photos..."
-          disabled={state === 'loading'}  
-        />
-        <div className="ui-buttons">
-          <button
-            className="ui-button"
-            disabled={state === 'loading'}>
-              {searchText}
-          </button>
-          {state === 'loading' &&
-            <button
-              className="ui-button"
-              type="button"
-              onClick={() => this.transition({ type: 'CANCEL_SEARCH' })}
-            >
-              Cancel
-            </button>
-          }
-        </div>
-      </form>
-    )
+    return <Form
+      state = {state}
+      query = {this.state.query}
+      transition = {this.transition}
+      handleChangeQuery = {this.handleChangeQuery}
+      handleSubmit = {this.handleSubmit}
+    />
   }
 
   renderGallery(state) {
